@@ -12,18 +12,18 @@ final class PersonTest extends TestCase
 {
     public const MAP_LETTERS = 'TRWAGMYFPDXBNJZSQVHLCKE';
 
-    public function testDNI()
+    public function testDNI() : void
     {
         self::assertTrue($this->isValidDNI($this->faker->dni));
     }
 
-    public function testNIE()
+    public function testNIE() : void
     {
         self::assertTrue($this->isValidNie($this->faker->nie));
     }
 
     // validation taken from http://kiwwito.com/php-function-for-spanish-dni-nie-validation/
-    public function isValidDNI($string)
+    public function isValidDNI($string) : bool
     {
         if (strlen($string) != 9 || preg_match('/^[XYZ]?([0-9]{7,8})([A-Z])$/i', $string, $matches) !== 1) {
             return false;
