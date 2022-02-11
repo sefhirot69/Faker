@@ -10,9 +10,16 @@ use Faker\Test\TestCase;
  */
 final class PersonTest extends TestCase
 {
+    public const MAP_LETTERS = 'TRWAGMYFPDXBNJZSQVHLCKE';
+
     public function testDNI()
     {
         self::assertTrue($this->isValidDNI($this->faker->dni));
+    }
+
+    public function testNIE()
+    {
+        self::assertTrue($this->isValidNie($this->faker->nie));
     }
 
     // validation taken from http://kiwwito.com/php-function-for-spanish-dni-nie-validation/
@@ -23,11 +30,35 @@ final class PersonTest extends TestCase
             return false;
         }
 
-        $map = 'TRWAGMYFPDXBNJZSQVHLCKE';
-
         [, $number, $letter] = $matches;
 
-        return strtoupper($letter) === $map[((int) $number) % 23];
+        return strtoupper($letter) === self::MAP_LETTERS[((int) $number) % 23];
+    }
+
+    /**
+     * @doc https://blog.trescomatres.com/2019/09/php-validar-un-nie/
+     * @param string $nif
+     * @return bool
+     */
+    public function isValidNie(string $nif): bool
+    {
+        if (preg_match('/^[XYZT][0-9][0-9][0-9][0-9][0-9][0-9][0-9][A-Z0-9]/', $nif)) {
+            for ($i = 0;$i < 9;++$i) {
+                $num[$i] = substr($nif, $i, 1);
+            }
+
+            if ($num[8] == substr(
+                    self::MAP_LETTERS,
+                    substr(str_replace(['X','Y','Z'], [0,1,2], $nif), 0, 8) % 23,
+                    1
+                )) {
+                return true;
+            }
+
+            return false;
+        }
+
+        return false;
     }
 
     public function testLicenceCode()

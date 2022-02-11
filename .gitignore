@@ -5,3 +5,4 @@
 /vendor-bin/psalm/vendor/
 /.php-cs-fixer.cache
 /composer.lock
+.idea

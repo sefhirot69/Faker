@@ -114,6 +114,12 @@ class Person extends \Faker\Provider\Person
 
     protected static $licenceCodes = ['AM', 'A1', 'A2', 'A', 'B', 'B+E', 'C1', 'C1+E', 'C', 'C+E', 'D1', 'D1+E', 'D', 'D+E'];
 
+    protected static $controlDigit = [
+        0 => 'X',
+        1 => 'Y',
+        2 => 'Z',
+    ];
+
     /**
      * @example 'Hijo'
      */
@@ -135,6 +141,20 @@ class Person extends \Faker\Provider\Person
         $letter = self::$crcMap[$number % 23];
 
         return $number . $letter;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public static function nie(): string
+    {
+        $firstNumber = mt_rand(0, 2);
+        $firstLetter = static::$controlDigit[$firstNumber];
+        $randomNumber = mt_rand(1000000, 9999999);
+        $number = $firstNumber . $randomNumber;
+        $lastLetter = self::$crcMap[$number % 23];
+
+        return $firstLetter . $randomNumber . $lastLetter;
     }
 
     /**
